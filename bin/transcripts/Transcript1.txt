@@ -1,0 +1,10 @@
+Institution	Random Base University
+Grade scale	3.5
+Student name	Mike McAllister
+Student identifier	B00123456
+Program	Bachelor of Computer Science
+Major	Computer Science
+1950-09	CSCI	1001	Introduction to computing on the abacus	3	45
+1950-09	ENGL	1000	Writing without clay tablets	2	60
+1951-01	CSCI	1002	Advanced abacus techniques	3	51
+1951-01	MATH	1100	Arithmetic without using your fingers	4	30
