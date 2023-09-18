@@ -16,7 +16,7 @@ import java.util.Set;
 import com.csci.assignment.beans.Course;
 import com.csci.assignment.beans.Transcript;
 
-public class AssignmentInfo {
+public class AdmissionInfo {
 
   //Helper methods class
   private HelperMethods hm;
@@ -31,7 +31,7 @@ public class AssignmentInfo {
   private Map<String, Transcript> applicantTranscripts;
 
   // Class constructor
-  public AssignmentInfo() {
+  public AdmissionInfo() {
     hm = new HelperMethods();
     gradingScales = new LinkedHashMap<>();
     applicantTranscripts = new LinkedHashMap<>();

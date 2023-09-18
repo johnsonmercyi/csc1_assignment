@@ -8,15 +8,15 @@ import java.io.StringWriter;
 import java.util.Map;
 import java.util.Set;
 
-import com.csci.assignment.AssignmentInfo;
+import com.csci.assignment.AdmissionInfo;
 
 public class AssignmentInfoTestService {
   //AssignmentInfo object
-  AssignmentInfo ai;
+  AdmissionInfo ai;
   // Use ClassLoader to load the resource
   ClassLoader classLoader;
 
-  public AssignmentInfoTestService(AssignmentInfo ai) {
+  public AssignmentInfoTestService(AdmissionInfo ai) {
     this.ai = ai;
     classLoader = getClass().getClassLoader();
   }
