@@ -1,0 +1,23 @@
+├──Assignment
+  └── bin/
+  └── doc/
+  └── lib/
+  └── resources/
+  │      ├── transcripts/
+  │        └── Transcript1.txt
+  └── src/
+  │   └── com/
+  │       └── csci/
+  │           └── assignment/
+  │               └── basic_test_service/
+  │                    └── AssignmentInfoTestService.java
+  │               └── beans/
+  │                    └── Course.java
+  │                    └── Transcript.java
+  │               └── util/
+  │                    └── TaskManager.java
+  │               └── A1.java
+  │               └── AdmissionInfo.java
+  │
+  └── test/
+  └── README.md

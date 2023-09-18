@@ -47,7 +47,7 @@ public class AdmissionInfo {
    */
   public boolean gradeScale(String scaleName, BufferedReader scaleInfo) {
     try {
-      if (scaleName == null || scaleName.trim().isEmpty() || gradingScales.containsKey(scaleName)) {
+      if (scaleName == null || scaleName.trim().isEmpty() || scaleName.trim() == "" || gradingScales.containsKey(scaleName)) {
         System.out.println("Invalid scale format");
         return false; // Invalid scaleName or scaleName already exists
       }
@@ -105,6 +105,10 @@ public class AdmissionInfo {
    */
   public boolean applicantTranscript(String applicantId, BufferedReader transcriptStream) {
     try {
+      if (applicantId == null || applicantId.trim().isEmpty() || applicantId.trim() == "") {
+        System.err.println("Applicant not found!");
+        return false; // Invalid scaleName or scaleName already exists
+      }
       return hm.readAndParseHeaderLines(applicantId, transcriptStream);
     } catch (Exception e) {
       // TODO: handle exception
