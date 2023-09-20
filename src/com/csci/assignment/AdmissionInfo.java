@@ -6,7 +6,9 @@ import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -18,7 +20,7 @@ import com.csci.assignment.beans.Transcript;
 
 public class AdmissionInfo {
 
-  //Helper methods class
+  // Helper methods class
   private HelperMethods hm;
 
   // Map to store grading scales with their names
@@ -47,15 +49,21 @@ public class AdmissionInfo {
    */
   public boolean gradeScale(String scaleName, BufferedReader scaleInfo) {
     try {
-      if (scaleName == null || scaleName.trim().isEmpty() || gradingScales.containsKey(scaleName) || scaleInfo == null || !scaleInfo.ready()) {
+      if (scaleName == null || scaleName.trim().isEmpty() || gradingScales.containsKey(scaleName) || scaleInfo == null
+          || !scaleInfo.ready()) {
         System.out.println("Invalid scale format");
         return false; // Invalid scaleName or scaleName already exists
       }
 
-      
+      Set<String> validDalGrades = new HashSet<>(
+          Arrays.asList("A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D", "F"));
       Map<String, String> scaleMapping = new LinkedHashMap<>();
       String line;
-      
+
+      // Initialize prevEndGrade to -1
+      int prevEndGrade = -1;
+      boolean hasHole = false;
+
       while ((line = scaleInfo.readLine()) != null) {
         System.out.println("Line read: " + line);
         // Split the line into original grade and Dalhousie letter grade
@@ -66,6 +74,41 @@ public class AdmissionInfo {
           String originalGrade = parts[0];
           String dalhousieGrade = parts[1];
 
+          if (originalGrade.matches(".*[a-zA-Z].*")) {
+            if (originalGrade.contains("-")) {
+              System.out.println("Invalid alphabet grade: " + originalGrade);
+              return false;
+            }
+          }
+
+          if (originalGrade.matches(".*\\d.*")) {
+            int startGrade = Integer.parseInt(originalGrade.split("-")[0]);
+            int endGrade = Integer.parseInt(originalGrade.split("-")[1]);
+            if (startGrade > endGrade) {
+              System.out.println("Malformed numeric grade: " + originalGrade);
+              return false;
+            }
+
+            // Check that the numeric grade range has no holes
+            if (prevEndGrade != -1 && startGrade != prevEndGrade + 1) {
+              System.out.println("Hole in numeric grade range: " + (prevEndGrade + 1) + "-" + (startGrade - 1));
+              hasHole = true;
+            }
+
+            prevEndGrade = endGrade;
+          }
+
+          // Check if the Dalhousie grade is in the validDalGrades set
+          if (!validDalGrades.contains(dalhousieGrade)) {
+            System.out.println("Invalid Dalhousie grade: " + dalhousieGrade);
+            return false;
+          }
+
+          if (scaleMapping.containsKey(originalGrade)) {
+            System.out.println("Duplicate numeric grade: " + originalGrade);
+            return false; // Duplicate  grade
+          }
+
           // Add the mapping to the grading scale
           scaleMapping.put(originalGrade, dalhousieGrade);
         } else {
@@ -74,9 +117,16 @@ public class AdmissionInfo {
         }
       }
 
+      //If it has holes then it's not a valid grade scale
+      if (hasHole) {
+        System.out.println("Numeric grade range contains holes");
+        return false;
+      }
+
       // Store the grading scale in the gradingScales map
       gradingScales.put(scaleName, scaleMapping);
       return true;
+
     } catch (IOException e) {
       return false;
     }
@@ -102,7 +152,8 @@ public class AdmissionInfo {
    * Accepts and stores an applicant's transcript.
    *
    * @param applicantId      The ID of the applicant.
-   * @param transcriptStream A BufferedReader containing the applicant's transcript.
+   * @param transcriptStream A BufferedReader containing the applicant's
+   *                         transcript.
    * @return True if the transcript was successfully recorded, false otherwise.
    */
   public boolean applicantTranscript(String applicantId, BufferedReader transcriptStream) {
@@ -172,13 +223,16 @@ public class AdmissionInfo {
    * Calculates the GPA of an applicant based on their transcript.
    * 
    * @param applicantId      The ID of the applicant.
-   * @param maxHours         The maximum credit hours to consider for GPA calculation.
-   * @param coursesToExclude A set of course titles to exclude from GPA calculation.
+   * @param maxHours         The maximum credit hours to consider for GPA
+   *                         calculation.
+   * @param coursesToExclude A set of course titles to exclude from GPA
+   *                         calculation.
    * @return The computed GPA or -1.0 in case of an error.
    */
   public double applicantGPA(String applicantId, double maxHours, Set<String> coursesToExclude) {
     // Check if the applicantId exists in the transcripts
-    if (applicantId == null || applicantId.trim().isEmpty() || maxHours == 0.0 || !applicantTranscripts.containsKey(applicantId)) {
+    if (applicantId == null || applicantId.trim().isEmpty() || maxHours == 0.0
+        || !applicantTranscripts.containsKey(applicantId)) {
       return -1.0; // Return a negative number to indicate an error
     }
 
@@ -224,7 +278,8 @@ public class AdmissionInfo {
    * Determines when core courses were taken by an applicant.
    *
    * @param applicantId The ID of the applicant.
-   * @return A map of core course stems and the last term taken, or null in case of an error.
+   * @return A map of core course stems and the last term taken, or null in case
+   *         of an error.
    */
   public Map<String, Integer> coursesTaken(String applicantId) {
     // Check if the applicantId exists in the transcripts
@@ -272,7 +327,7 @@ public class AdmissionInfo {
 
     return lastOccurrenceMap;
   }
-  
+
   /**
    * Contains helper methods
    */
@@ -299,7 +354,8 @@ public class AdmissionInfo {
       return readAndParseCourseLines(applicantId, transcriptStream, transcript);
     }
 
-    public boolean readAndParseCourseLines(String applicantId, BufferedReader transcriptStream, Transcript transcript) throws NumberFormatException, IOException {
+    public boolean readAndParseCourseLines(String applicantId, BufferedReader transcriptStream, Transcript transcript)
+        throws NumberFormatException, IOException {
       // Read and parse course grade lines
       String line;
       while ((line = transcriptStream.readLine()) != null) {
@@ -340,7 +396,7 @@ public class AdmissionInfo {
           && headerLines[4].startsWith("Program")
           && headerLines[5].startsWith("Major");
     }
-  
+
     private String translateGrade(String originalGrade) {
       // Iterate over the available grading scales
       for (Map<String, String> scale : gradingScales.values()) {
@@ -400,10 +456,10 @@ public class AdmissionInfo {
       // (ascending)
       Collections.sort(filteredCourses, (course1, course2) -> {
         if (course1.getCourseNumber() != course2.getCourseNumber()) {
-          //course numbers are not a tie
+          // course numbers are not a tie
           return course2.getCourseNumber() - course1.getCourseNumber();
         } else {
-          //there is a tie
+          // there is a tie
           return course1.getSubjectCode().compareTo(course2.getSubjectCode());
         }
       });
@@ -441,13 +497,13 @@ public class AdmissionInfo {
             // Find the matching grading scale based on numeric range
             for (Map<String, String> scale : gradingScales.values()) {
               for (String key : scale.keySet()) {
-                
+
                 if (key.contains("-")) {
                   String[] gradeParts = key.split("-");
                   int startGrade = Integer.parseInt(gradeParts[0]);
                   int endGrade = Integer.parseInt(gradeParts[1]);
 
-                  //check if grade is within the range of the current grade scale
+                  // check if grade is within the range of the current grade scale
                   if (numGrade >= startGrade && numGrade <= endGrade) {
                     return dalhousieGradeScale.get(scale.get(key));
                   }
