@@ -1,0 +1,10 @@
+Institution	London University
+Grade scale	4
+Student name	John Doe
+Student identifier	B00654321
+Program	Bachelor of Natural Science
+Major	Physics
+1950-09	CSCI	1001	Introduction to computing on the abacus	3	CD
+1950-09	ENGL	1000	Writing without clay tablets	2	CC
+1951-01	CSCI	1002	Advanced abacus techniques	3	FF
+1951-01	MATH	1100	Arithmetic without using your fingers	4	AB

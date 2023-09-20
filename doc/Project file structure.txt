@@ -20,4 +20,5 @@
   │               └── AdmissionInfo.java
   │
   └── test/
+    ├── AdmissionInfoTest.java
   └── README.md

@@ -47,15 +47,17 @@ public class AdmissionInfo {
    */
   public boolean gradeScale(String scaleName, BufferedReader scaleInfo) {
     try {
-      if (scaleName == null || scaleName.trim().isEmpty() || scaleName.trim() == "" || gradingScales.containsKey(scaleName)) {
+      if (scaleName == null || scaleName.trim().isEmpty() || gradingScales.containsKey(scaleName) || scaleInfo == null || !scaleInfo.ready()) {
         System.out.println("Invalid scale format");
         return false; // Invalid scaleName or scaleName already exists
       }
 
+      
       Map<String, String> scaleMapping = new LinkedHashMap<>();
       String line;
-
+      
       while ((line = scaleInfo.readLine()) != null) {
+        System.out.println("Line read: " + line);
         // Split the line into original grade and Dalhousie letter grade
         String[] parts = line.split("\t");
 

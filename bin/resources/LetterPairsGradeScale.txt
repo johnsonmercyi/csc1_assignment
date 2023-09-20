@@ -1,0 +1,11 @@
+AA	A+
+AB	A
+BB	A-
+BC	B+
+CC	B
+CD	B-
+DD	C+
+DE	C
+DF	C-
+FF	D
+FG	F
