@@ -247,4 +247,44 @@ public class AdmissionInfoTest {
     assertFalse(admissionInfo.gradeScale(scaleName, reader));
   }
 
+
+
+  /*---------------------------------------------------------------- */
+  /*                    coreAdmissionCourses Test                    */
+  /*---------------------------------------------------------------- */
+  @Test
+  public void testCoreAdmissionCourseWithNullCourseStem() {
+    String courseStem = null;
+
+    // Test the coreAdmissionCourse method
+    assertFalse(admissionInfo.coreAdmissionCourse(courseStem));
+  }
+
+  @Test
+  public void testCoreAdmissionCourseWithEmptyCourseStem() {
+    String courseStem = "";
+
+    // Test the coreAdmissionCourse method
+    assertFalse(admissionInfo.coreAdmissionCourse(courseStem));
+  }
+
+  @Test
+  public void testCoreAdmissionCourseCourseStemNotSentBefore() {
+    String courseStem = "abacus";
+
+    // Test the coreAdmissionCourse method
+    assertTrue(admissionInfo.coreAdmissionCourse(courseStem));
+  }
+
+  @Test
+  public void testCoreAdmissionCourseCourseStemSentBefore() {
+    String courseStem = "DuplicateCourseStem";
+
+    // Send in the course stem once
+    assertTrue(admissionInfo.coreAdmissionCourse(courseStem));
+
+    // Test sending in the same course stem again
+    assertFalse(admissionInfo.coreAdmissionCourse(courseStem));
+  }
+
 }

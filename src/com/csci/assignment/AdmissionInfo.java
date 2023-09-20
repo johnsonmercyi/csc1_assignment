@@ -140,7 +140,7 @@ public class AdmissionInfo {
    */
   public boolean coreAdmissionCourse(String courseStem) {
     // Check if the courseStem is not null or empty
-    if (courseStem != null && !courseStem.trim().isEmpty()) {
+    if (courseStem != null && !courseStem.trim().isEmpty() && !interestCourses.contains(courseStem)) {
       // Add the courseStem to the set of interest courses
       interestCourses.add(courseStem);
       return true;
