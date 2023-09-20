@@ -139,6 +139,7 @@ public class AdmissionInfo {
    * @return True if the course stem was successfully recorded, false otherwise.
    */
   public boolean coreAdmissionCourse(String courseStem) {
+    courseStem = courseStem.toLowerCase().trim();
     // Check if the courseStem is not null or empty
     if (courseStem != null && !courseStem.trim().isEmpty() && !interestCourses.contains(courseStem)) {
       // Add the courseStem to the set of interest courses

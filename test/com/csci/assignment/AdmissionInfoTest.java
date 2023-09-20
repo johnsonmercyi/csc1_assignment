@@ -287,4 +287,36 @@ public class AdmissionInfoTest {
     assertFalse(admissionInfo.coreAdmissionCourse(courseStem));
   }
 
+  @Test
+  public void testCoreAdmissionCourseSingleWordCourseStem() {
+    String courseStem = "tablets";
+
+    // Test sending in a single-word course stem
+    assertTrue(admissionInfo.coreAdmissionCourse(courseStem));
+  }
+
+  @Test
+  public void testCoreAdmissionCourseMultiWordCourseStem() {
+    String courseStem = "algorithm analysis";
+
+    // Test sending in a multi-word course stem
+    assertTrue(admissionInfo.coreAdmissionCourse(courseStem));
+  }
+
+  @Test
+  public void testCoreAdmissionCourseAllLowerCaseCourseStem() {
+    String courseStem = "algorithm";
+
+    // Test sending in an all lower-case course stem
+    assertTrue(admissionInfo.coreAdmissionCourse(courseStem));
+  }
+
+  @Test
+  public void testCoreAdmissionCourseAllUpperCaseCourseStem() {
+    String courseStem = "ALGORITHM";
+
+    // Test sending in an all upper-case course stem
+    assertTrue(admissionInfo.coreAdmissionCourse(courseStem));
+  }
+
 }
